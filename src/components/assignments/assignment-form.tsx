@@ -70,7 +70,7 @@ export function AssignmentForm() {
       return;
     }
 
-    const lastCheckTimestamp = sessionStorage.getItem('lastConflictCheckTimestamp');
+    const lastCheckTimestamp = localStorage.getItem('lastConflictCheckTimestamp');
     const now = Date.now();
 
     if (lastCheckTimestamp && now - parseInt(lastCheckTimestamp, 10) < COOLDOWN_PERIOD) {
@@ -83,7 +83,7 @@ export function AssignmentForm() {
     }
     
     setConflictCheckRan(false);
-    sessionStorage.setItem('lastConflictCheckTimestamp', now.toString());
+    localStorage.setItem('lastConflictCheckTimestamp', now.toString());
     setIsCoolingDown(true);
     setTimeout(() => setIsCoolingDown(false), COOLDOWN_PERIOD);
 
