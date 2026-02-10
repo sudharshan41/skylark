@@ -93,59 +93,52 @@ export const drones: Drone[] = [
 
 export const projects: Project[] = [
   {
-    id: 'proj-1',
-    name: 'Golden Gate Bridge Inspection',
-    location: 'San Francisco, CA',
-    requiredSkills: ['Infrastructure Inspection', 'UAV Piloting'],
-    requiredCertifications: ['Part 107', 'ASNT-TC-1A'],
+    id: 'PRJ001',
+    name: 'Client A - Mapping',
+    location: 'Bangalore',
+    requiredSkills: ['Mapping'],
+    requiredCertifications: ['DGCA'],
   },
   {
-    id: 'proj-2',
-    name: 'SXSW Music Festival Aerial Shots',
-    location: 'Austin, TX',
-    requiredSkills: ['Cinematography', 'FPV Drone Racing'],
-    requiredCertifications: ['Part 107'],
+    id: 'PRJ002',
+    name: 'Client B - Inspection',
+    location: 'Mumbai',
+    requiredSkills: ['Inspection'],
+    requiredCertifications: ['DGCA', 'Night Vision'],
   },
   {
-    id: 'proj-3',
-    name: 'Iowa Cornfield Health Survey',
-    location: 'Des Moines, IA',
-    requiredSkills: ['Agricultural Surveys', 'GIS Mapping'],
-    requiredCertifications: ['Part 107', 'Pesticide Applicator'],
-  },
-  {
-    id: 'proj-4',
-    name: 'Rocky Mountain SAR Operation',
-    location: 'Denver, CO',
-    requiredSkills: ['Search and Rescue', 'Night Operations', 'Thermal Imaging'],
-    requiredCertifications: ['Part 107', 'Wilderness First Responder'],
+    id: 'PRJ003',
+    name: 'Client C - Thermal Imaging',
+    location: 'Bangalore',
+    requiredSkills: ['Thermal Imaging'],
+    requiredCertifications: ['DGCA'],
   },
 ];
 
 export const assignments: Assignment[] = [
   {
     id: 'asgn-1',
-    project: projects[1],
-    pilot: pilots[1],
-    drone: drones[2],
+    project: projects[1], // Client B - Inspection
+    pilot: pilots[1], // Ben Carter
+    drone: drones[2], // CineMover 8K
     startTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     endTime: new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(),
     status: 'Active',
   },
   {
     id: 'asgn-2',
-    project: projects[0],
-    pilot: pilots[4],
-    drone: drones[0],
-    startTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-    endTime: new Date(Date.now() + 30 * 60 * 60 * 1000).toISOString(),
+    project: projects[0], // Client A - Mapping
+    pilot: pilots[0], // Amelia Reyes
+    drone: drones[0], // AeroScout Pro
+    startTime: new Date('2026-02-06T09:00:00Z').toISOString(),
+    endTime: new Date('2026-02-08T17:00:00Z').toISOString(),
     status: 'Upcoming',
   },
   {
     id: 'asgn-3',
-    project: projects[3],
-    pilot: pilots[3],
-    drone: drones[3],
+    project: projects[2], // Client C - Thermal Imaging
+    pilot: pilots[3], // David Chen
+    drone: drones[3], // NightHawk IR
     startTime: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
     endTime: new Date(Date.now() - 40 * 60 * 60 * 1000).toISOString(),
     status: 'Completed',
