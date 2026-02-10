@@ -7,7 +7,7 @@ export const pilots: Pilot[] = [
     avatarUrl: 'https://picsum.photos/seed/pilot1/200/200',
     skills: ['UAV Piloting', 'Thermal Imaging', 'GIS Mapping'],
     certifications: ['Part 107', 'Level 1 Thermography'],
-    location: 'San Francisco, CA',
+    location: 'Bangalore',
     status: 'Available',
   },
   {
@@ -25,8 +25,8 @@ export const pilots: Pilot[] = [
     avatarUrl: 'https://picsum.photos/seed/pilot3/200/200',
     skills: ['Agricultural Surveys', 'Payload Operation', 'LIDAR Scanning'],
     certifications: ['Part 107', 'Pesticide Applicator'],
-    location: 'Des Moines, IA',
-    status: 'Available',
+    location: 'Mumbai',
+    status: 'On Mission',
   },
   {
     id: 'pilot-4',
@@ -50,43 +50,35 @@ export const pilots: Pilot[] = [
 
 export const drones: Drone[] = [
   {
-    id: 'drone-1',
-    model: 'AeroScout Pro',
+    id: 'D001',
+    model: 'DJI M300',
     imageUrl: 'https://picsum.photos/seed/drone1/400/300',
-    capabilities: ['4K Camera', '30-min Flight Time', 'Obstacle Avoidance', 'Thermal Imaging'],
-    location: 'San Francisco, CA',
+    capabilities: ['LiDAR', 'RGB'],
+    location: 'Bangalore',
     status: 'Available',
   },
   {
-    id: 'drone-2',
-    model: 'TerraWing X',
+    id: 'D002',
+    model: 'DJI Mavic 3 RGB',
     imageUrl: 'https://picsum.photos/seed/drone2/400/300',
-    capabilities: ['LIDAR Scanner', '1-hour Flight Time', 'Heavy Payload (15kg)'],
-    location: 'Des Moines, IA',
-    status: 'Available',
-  },
-  {
-    id: 'drone-3',
-    model: 'CineMover 8K',
-    imageUrl: 'https://picsum.photos/seed/drone3/400/300',
-    capabilities: ['8K Cinema Camera', 'Dual Operator Control', 'FPV Mode'],
-    location: 'Austin, TX',
-    status: 'On Mission',
-  },
-  {
-    id: 'drone-4',
-    model: 'NightHawk IR',
-    imageUrl: 'https://picsum.photos/seed/drone4/400/300',
-    capabilities: ['Infrared Camera', 'Silent Rotors', '45-min Flight Time', 'Search and Rescue'],
-    location: 'Denver, CO',
+    capabilities: ['RGB'],
+    location: 'Mumbai',
     status: 'In Maintenance',
   },
   {
-    id: 'drone-5',
-    model: 'SkyCarrier H20',
-    imageUrl: 'https://picsum.photos/seed/drone5/400/300',
-    capabilities: ['Heavy Payload (20kg)', 'Package Delivery System', '1-hour Flight Time'],
-    location: 'San Francisco, CA',
+    id: 'D003',
+    model: 'DJI Mavic 3 Thermal',
+    imageUrl: 'https://picsum.photos/seed/drone3/400/300',
+    capabilities: ['Thermal'],
+    location: 'Mumbai',
+    status: 'On Mission',
+  },
+  {
+    id: 'D004',
+    model: 'Autel Evo II Thermal, RC',
+    imageUrl: 'https://picsum.photos/seed/drone4/400/300',
+    capabilities: ['Thermal', 'RC'],
+    location: 'Bangalore',
     status: 'Available',
   },
 ];
@@ -118,27 +110,27 @@ export const projects: Project[] = [
 export const assignments: Assignment[] = [
   {
     id: 'asgn-1',
-    project: projects[1], // Client B - Inspection
-    pilot: pilots[1], // Ben Carter
-    drone: drones[2], // CineMover 8K
+    project: projects[1], // Client B - Inspection in Mumbai
+    pilot: pilots[2], // Chloe Garcia in Mumbai
+    drone: drones[2], // DJI Mavic 3 Thermal in Mumbai
     startTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     endTime: new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(),
     status: 'Active',
   },
   {
     id: 'asgn-2',
-    project: projects[0], // Client A - Mapping
-    pilot: pilots[0], // Amelia Reyes
-    drone: drones[0], // AeroScout Pro
-    startTime: new Date('2026-02-06T09:00:00Z').toISOString(),
-    endTime: new Date('2026-02-08T17:00:00Z').toISOString(),
+    project: projects[0], // Client A - Mapping in Bangalore
+    pilot: pilots[0], // Amelia Reyes in Bangalore
+    drone: drones[0], // DJI M300 in Bangalore
+    startTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    endTime: new Date(Date.now() + 32 * 60 * 60 * 1000).toISOString(),
     status: 'Upcoming',
   },
   {
     id: 'asgn-3',
-    project: projects[2], // Client C - Thermal Imaging
-    pilot: pilots[3], // David Chen
-    drone: drones[3], // NightHawk IR
+    project: projects[2], // Client C - Thermal Imaging in Bangalore
+    pilot: pilots[0], // Amelia Reyes in Bangalore
+    drone: drones[3], // Autel Evo II in Bangalore
     startTime: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
     endTime: new Date(Date.now() - 40 * 60 * 60 * 1000).toISOString(),
     status: 'Completed',
