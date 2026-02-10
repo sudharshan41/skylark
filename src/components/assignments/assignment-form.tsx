@@ -39,6 +39,7 @@ type AssignmentFormValues = z.infer<typeof assignmentSchema>;
 
 export function AssignmentForm() {
   const [conflicts, setConflicts] = useState<string[]>([]);
+  const [conflictCheckRan, setConflictCheckRan] = useState(false);
   const [isCheckingConflicts, startConflictCheck] = useTransition();
   const { toast } = useToast();
 
@@ -51,54 +52,70 @@ export function AssignmentForm() {
     },
   });
 
-  const { watch, handleSubmit } = form;
+  const { watch, handleSubmit, getValues } = form;
   const watchedFields = watch();
 
   useEffect(() => {
-    const { projectId, pilotId, droneId } = watchedFields;
+    setConflictCheckRan(false);
+    setConflicts([]);
+  }, [watchedFields.projectId, watchedFields.pilotId, watchedFields.droneId]);
 
-    if (projectId && pilotId && droneId) {
-      startConflictCheck(async () => {
-        const project = projects.find((p) => p.id === projectId);
-        const pilot = pilots.find((p) => p.id === pilotId);
-        const drone = drones.find((d) => d.id === droneId);
-
-        if (!project || !pilot || !drone) {
-          return;
-        }
-
-        try {
-          const result = await detectAssignmentConflicts({
-            pilotId,
-            droneId,
-            projectId,
-            assignmentStartTime: new Date().toISOString(),
-            assignmentEndTime: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(),
-            pilotSkills: pilot.skills,
-            requiredSkills: project.requiredSkills,
-            pilotLocation: pilot.location,
-            droneLocation: drone.location,
-            projectLocation: project.location,
-            pilotCertifications: pilot.certifications,
-            requiredCertifications: project.requiredCertifications,
-          });
-          setConflicts(result.conflicts);
-        } catch (error) {
-          console.error(error);
-          toast({
-            variant: 'destructive',
-            title: 'Error',
-            description: 'Failed to check for conflicts.',
-          });
-          setConflicts(['An unexpected error occurred while checking for conflicts.']);
-        }
-      });
-    } else {
-      setConflicts([]);
+  async function handleConflictCheck() {
+    const { projectId, pilotId, droneId } = getValues();
+    if (!projectId || !pilotId || !droneId) {
+      return;
     }
-  }, [watchedFields.projectId, watchedFields.pilotId, watchedFields.droneId, toast]);
+
+    setConflictCheckRan(false);
+    startConflictCheck(async () => {
+      const project = projects.find((p) => p.id === projectId);
+      const pilot = pilots.find((p) => p.id === pilotId);
+      const drone = drones.find((d) => d.id === droneId);
+
+      if (!project || !pilot || !drone) {
+        return;
+      }
+
+      try {
+        const result = await detectAssignmentConflicts({
+          pilotId,
+          droneId,
+          projectId,
+          assignmentStartTime: new Date().toISOString(),
+          assignmentEndTime: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(),
+          pilotSkills: pilot.skills,
+          requiredSkills: project.requiredSkills,
+          pilotLocation: pilot.location,
+          droneLocation: drone.location,
+          projectLocation: project.location,
+          pilotCertifications: pilot.certifications,
+          requiredCertifications: project.requiredCertifications,
+        });
+        setConflicts(result.conflicts);
+      } catch (error) {
+        console.error(error);
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to check for conflicts.',
+        });
+        setConflicts(['An unexpected error occurred while checking for conflicts.']);
+      } finally {
+        setConflictCheckRan(true);
+      }
+    });
+  }
 
   function onSubmit(data: AssignmentFormValues) {
+    if (!conflictCheckRan || conflicts.length > 0) {
+      toast({
+        variant: "destructive",
+        title: "Cannot create assignment",
+        description: "Please run a conflict check and resolve any issues before creating the assignment.",
+      });
+      return;
+    }
+
     console.log(data);
     toast({
         title: "Assignment Created!",
@@ -106,7 +123,10 @@ export function AssignmentForm() {
     })
     form.reset();
     setConflicts([]);
+    setConflictCheckRan(false);
   }
+  
+  const allFieldsSelected = watchedFields.projectId && watchedFields.pilotId && watchedFields.droneId;
 
   return (
     <Card className="max-w-3xl mx-auto">
@@ -192,14 +212,25 @@ export function AssignmentForm() {
               />
             </div>
             
-            {isCheckingConflicts && (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>AI is checking for conflicts...</span>
-              </div>
-            )}
+            <div className="flex flex-col sm:flex-row gap-4 items-center">
+                <Button type="button" onClick={handleConflictCheck} disabled={!allFieldsSelected || isCheckingConflicts}>
+                    {isCheckingConflicts ? (
+                    <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Checking...
+                    </>
+                    ) : (
+                    'Check for Conflicts'
+                    )}
+                </Button>
+                {isCheckingConflicts && (
+                    <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                        <span>AI is checking for conflicts...</span>
+                    </div>
+                )}
+            </div>
 
-            {conflicts.length > 0 && !isCheckingConflicts && (
+            {conflictCheckRan && conflicts.length > 0 && !isCheckingConflicts && (
               <Alert variant="destructive">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle className="font-headline">Assignment Conflicts Detected</AlertTitle>
@@ -213,7 +244,7 @@ export function AssignmentForm() {
               </Alert>
             )}
 
-            {conflicts.length === 0 && !isCheckingConflicts && watchedFields.projectId && watchedFields.pilotId && watchedFields.droneId && (
+            {conflictCheckRan && conflicts.length === 0 && !isCheckingConflicts && allFieldsSelected && (
                  <Alert variant="default" className="bg-primary/10 border-primary/20">
                     <Bot className="h-4 w-4 text-primary" />
                     <AlertTitle className="font-headline text-primary">No Conflicts Detected</AlertTitle>
@@ -223,7 +254,7 @@ export function AssignmentForm() {
                 </Alert>
             )}
 
-            <Button type="submit" disabled={conflicts.length > 0 || isCheckingConflicts || !watchedFields.projectId}>
+            <Button type="submit" disabled={!allFieldsSelected || !conflictCheckRan || conflicts.length > 0 || isCheckingConflicts}>
               Create Assignment
             </Button>
           </form>
