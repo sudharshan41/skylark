@@ -62,13 +62,12 @@ export function AssignmentForm() {
     setConflicts([]);
   }, [projectId, pilotId, droneId]);
 
-  async function handleConflictCheck() {
+  function handleConflictCheck() {
     const values = getValues();
     if (!values.projectId || !values.pilotId || !values.droneId) {
       return;
     }
     
-    setIsCoolingDown(true);
     setConflictCheckRan(false);
 
     startConflictCheck(async () => {
@@ -106,10 +105,10 @@ export function AssignmentForm() {
         setConflicts(['An unexpected error occurred while checking for conflicts.']);
       } finally {
         setConflictCheckRan(true);
+        setIsCoolingDown(true);
+        setTimeout(() => setIsCoolingDown(false), 30000); // 30-second cooldown
       }
     });
-
-    setTimeout(() => setIsCoolingDown(false), 15000); // 15-second cooldown
   }
 
   function onSubmit(data: AssignmentFormValues) {
