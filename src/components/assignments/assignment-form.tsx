@@ -36,6 +36,8 @@ const assignmentSchema = z.object({
 
 type AssignmentFormValues = z.infer<typeof assignmentSchema>;
 
+const COOLDOWN_PERIOD = 30000; // 30 seconds
+
 export function AssignmentForm() {
   const [conflicts, setConflicts] = useState<string[]>([]);
   const [conflictCheckRan, setConflictCheckRan] = useState(false);
@@ -67,8 +69,23 @@ export function AssignmentForm() {
     if (!values.projectId || !values.pilotId || !values.droneId) {
       return;
     }
+
+    const lastCheckTimestamp = sessionStorage.getItem('lastConflictCheckTimestamp');
+    const now = Date.now();
+
+    if (lastCheckTimestamp && now - parseInt(lastCheckTimestamp, 10) < COOLDOWN_PERIOD) {
+      const timeLeft = Math.ceil((COOLDOWN_PERIOD - (now - parseInt(lastCheckTimestamp, 10))) / 1000);
+      toast({
+        title: 'Cooldown Active',
+        description: `Please wait ${timeLeft} more seconds before checking for conflicts again.`,
+      });
+      return;
+    }
     
     setConflictCheckRan(false);
+    sessionStorage.setItem('lastConflictCheckTimestamp', now.toString());
+    setIsCoolingDown(true);
+    setTimeout(() => setIsCoolingDown(false), COOLDOWN_PERIOD);
 
     startConflictCheck(async () => {
       const project = projects.find((p) => p.id === values.projectId);
@@ -105,8 +122,6 @@ export function AssignmentForm() {
         setConflicts(['An unexpected error occurred while checking for conflicts.']);
       } finally {
         setConflictCheckRan(true);
-        setIsCoolingDown(true);
-        setTimeout(() => setIsCoolingDown(false), 30000); // 30-second cooldown
       }
     });
   }
