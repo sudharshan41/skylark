@@ -62,7 +62,7 @@ To push this project to a new GitHub repository:
 3.  **Link the remote repository and push your code:**
     ```bash
     # Replace YOUR_REPOSITORY_URL with your actual repository URL
-    git remote add origin https://github.com/sudharshan41/skylark.git
+    git remote add origin your repository
     git push -u origin main
     ```
 
