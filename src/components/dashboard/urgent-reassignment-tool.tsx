@@ -18,6 +18,9 @@ import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { assignments, drones, pilots } from '@/lib/data';
 
+const AI_ASSISTANT_COOLDOWN = 30000; // 30 seconds
+const COOLDOWN_STORAGE_KEY = 'lastAIAssistantTimestamp';
+
 export function UrgentReassignmentTool() {
   const [open, setOpen] = useState(false);
   const [situation, setSituation] = useState('');
@@ -27,6 +30,20 @@ export function UrgentReassignmentTool() {
 
   const handleSubmit = async () => {
     if (!situation) return;
+
+    const lastCheckTimestamp = localStorage.getItem(COOLDOWN_STORAGE_KEY);
+    const now = Date.now();
+
+    if (lastCheckTimestamp && now - parseInt(lastCheckTimestamp, 10) < AI_ASSISTANT_COOLDOWN) {
+      const timeLeft = Math.ceil((AI_ASSISTANT_COOLDOWN - (now - parseInt(lastCheckTimestamp, 10))) / 1000);
+      toast({
+        title: 'AI Assistant is cooling down',
+        description: `Please wait ${timeLeft} more seconds before making another request.`,
+      });
+      return;
+    }
+
+    localStorage.setItem(COOLDOWN_STORAGE_KEY, now.toString());
     setIsLoading(true);
     setProposal('');
     try {
@@ -42,7 +59,7 @@ export function UrgentReassignmentTool() {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to generate reassignment proposal.',
+        description: 'Failed to generate reassignment proposal. You may have hit a rate limit.',
       });
     } finally {
       setIsLoading(false);

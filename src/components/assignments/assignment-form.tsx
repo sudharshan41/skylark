@@ -36,7 +36,9 @@ const assignmentSchema = z.object({
 
 type AssignmentFormValues = z.infer<typeof assignmentSchema>;
 
-const COOLDOWN_PERIOD = 30000; // 30 seconds
+const AI_ASSISTANT_COOLDOWN = 30000; // 30 seconds
+const COOLDOWN_STORAGE_KEY = 'lastAIAssistantTimestamp';
+
 
 export function AssignmentForm() {
   const [conflicts, setConflicts] = useState<string[]>([]);
@@ -70,22 +72,22 @@ export function AssignmentForm() {
       return;
     }
 
-    const lastCheckTimestamp = localStorage.getItem('lastConflictCheckTimestamp');
+    const lastCheckTimestamp = localStorage.getItem(COOLDOWN_STORAGE_KEY);
     const now = Date.now();
 
-    if (lastCheckTimestamp && now - parseInt(lastCheckTimestamp, 10) < COOLDOWN_PERIOD) {
-      const timeLeft = Math.ceil((COOLDOWN_PERIOD - (now - parseInt(lastCheckTimestamp, 10))) / 1000);
+    if (lastCheckTimestamp && now - parseInt(lastCheckTimestamp, 10) < AI_ASSISTANT_COOLDOWN) {
+      const timeLeft = Math.ceil((AI_ASSISTANT_COOLDOWN - (now - parseInt(lastCheckTimestamp, 10))) / 1000);
       toast({
-        title: 'Cooldown Active',
-        description: `Please wait ${timeLeft} more seconds before checking for conflicts again.`,
+        title: 'AI Assistant is cooling down',
+        description: `Please wait ${timeLeft} more seconds before making another request.`,
       });
       return;
     }
     
     setConflictCheckRan(false);
-    localStorage.setItem('lastConflictCheckTimestamp', now.toString());
+    localStorage.setItem(COOLDOWN_STORAGE_KEY, now.toString());
     setIsCoolingDown(true);
-    setTimeout(() => setIsCoolingDown(false), COOLDOWN_PERIOD);
+    setTimeout(() => setIsCoolingDown(false), AI_ASSISTANT_COOLDOWN);
 
     startConflictCheck(async () => {
       const project = projects.find((p) => p.id === values.projectId);
