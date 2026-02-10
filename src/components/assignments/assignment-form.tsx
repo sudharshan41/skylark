@@ -27,7 +27,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { detectAssignmentConflicts } from '@/ai/flows/detect-assignment-conflicts';
 import { useToast } from '@/hooks/use-toast';
-import { Input } from '../ui/input';
 
 const assignmentSchema = z.object({
   projectId: z.string().min(1, 'Project is required.'),
@@ -41,6 +40,7 @@ export function AssignmentForm() {
   const [conflicts, setConflicts] = useState<string[]>([]);
   const [conflictCheckRan, setConflictCheckRan] = useState(false);
   const [isCheckingConflicts, startConflictCheck] = useTransition();
+  const [isCoolingDown, setIsCoolingDown] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<AssignmentFormValues>({
@@ -52,25 +52,29 @@ export function AssignmentForm() {
     },
   });
 
-  const { watch, handleSubmit, getValues } = form;
-  const watchedFields = watch();
+  const { watch, handleSubmit, getValues, reset } = form;
+  const projectId = watch('projectId');
+  const pilotId = watch('pilotId');
+  const droneId = watch('droneId');
 
   useEffect(() => {
     setConflictCheckRan(false);
     setConflicts([]);
-  }, [watchedFields.projectId, watchedFields.pilotId, watchedFields.droneId]);
+  }, [projectId, pilotId, droneId]);
 
   async function handleConflictCheck() {
-    const { projectId, pilotId, droneId } = getValues();
-    if (!projectId || !pilotId || !droneId) {
+    const values = getValues();
+    if (!values.projectId || !values.pilotId || !values.droneId) {
       return;
     }
-
+    
+    setIsCoolingDown(true);
     setConflictCheckRan(false);
+
     startConflictCheck(async () => {
-      const project = projects.find((p) => p.id === projectId);
-      const pilot = pilots.find((p) => p.id === pilotId);
-      const drone = drones.find((d) => d.id === droneId);
+      const project = projects.find((p) => p.id === values.projectId);
+      const pilot = pilots.find((p) => p.id === values.pilotId);
+      const drone = drones.find((d) => d.id === values.droneId);
 
       if (!project || !pilot || !drone) {
         return;
@@ -78,9 +82,9 @@ export function AssignmentForm() {
 
       try {
         const result = await detectAssignmentConflicts({
-          pilotId,
-          droneId,
-          projectId,
+          pilotId: values.pilotId,
+          droneId: values.droneId,
+          projectId: values.projectId,
           assignmentStartTime: new Date().toISOString(),
           assignmentEndTime: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(),
           pilotSkills: pilot.skills,
@@ -97,13 +101,15 @@ export function AssignmentForm() {
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: 'Failed to check for conflicts.',
+          description: 'Failed to check for conflicts. You may have hit a rate limit.',
         });
         setConflicts(['An unexpected error occurred while checking for conflicts.']);
       } finally {
         setConflictCheckRan(true);
       }
     });
+
+    setTimeout(() => setIsCoolingDown(false), 5000); // 5-second cooldown
   }
 
   function onSubmit(data: AssignmentFormValues) {
@@ -121,12 +127,12 @@ export function AssignmentForm() {
         title: "Assignment Created!",
         description: "The new assignment has been successfully scheduled."
     })
-    form.reset();
+    reset();
     setConflicts([]);
     setConflictCheckRan(false);
   }
   
-  const allFieldsSelected = watchedFields.projectId && watchedFields.pilotId && watchedFields.droneId;
+  const allFieldsSelected = projectId && pilotId && droneId;
 
   return (
     <Card className="max-w-3xl mx-auto">
@@ -213,14 +219,16 @@ export function AssignmentForm() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 items-center">
-                <Button type="button" onClick={handleConflictCheck} disabled={!allFieldsSelected || isCheckingConflicts}>
+                <Button type="button" onClick={handleConflictCheck} disabled={!allFieldsSelected || isCheckingConflicts || isCoolingDown}>
                     {isCheckingConflicts ? (
-                    <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Checking...
-                    </>
+                      <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Checking...
+                      </>
+                    ) : isCoolingDown ? (
+                      'Ready to check again'
                     ) : (
-                    'Check for Conflicts'
+                      'Check for Conflicts'
                     )}
                 </Button>
                 {isCheckingConflicts && (
