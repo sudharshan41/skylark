@@ -2,6 +2,48 @@
 
 This is a Next.js application for coordinating drone and pilot assignments, with AI-powered features.
 
+## Technologies Used
+
+*   **Framework:** [Next.js](https://nextjs.org/) (using the App Router)
+*   **Language:** [TypeScript](https://www.typescriptlang.org/)
+*   **AI Engine:** [Genkit](https://firebase.google.com/docs/genkit)
+*   **Generative AI Model:** [Google Gemini](https://ai.google.dev/)
+*   **UI Components:** [ShadCN UI](https://ui.shadcn.com/)
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+*   **Icons:** [Lucide React](https://lucide.dev/)
+*   **Form Management:** [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/)
+
+## Architecture
+
+The application follows a modern, server-centric architecture with a clear separation between the user interface and the AI backend logic.
+
+```
++---------------------------------+
+|      User's Web Browser         |
++---------------------------------+
+               |
+               v (Interacts with)
++---------------------------------+
+|       Next.js Frontend          |
+|  - React Server Components      |
+|  - ShadCN UI Components         |
+|  - App Router for Navigation    |
++---------------------------------+
+               |
+               v (Calls Server Actions)
++---------------------------------+
+|        Genkit Backend           |
+|  - AI Flows (/src/ai/flows)     |
+|  - Manages AI model interactions|
++---------------------------------+
+               |
+               v (API Calls)
++---------------------------------+
+|       Google AI Platform        |
+|  - Gemini Foundational Models   |
++---------------------------------+
+```
+
 ## Development Workflow
 
 ### Pushing to GitHub
