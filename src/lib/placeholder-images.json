@@ -1,3 +1,64 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "pilot-1",
+      "description": "Portrait of a female pilot",
+      "imageUrl": "https://images.unsplash.com/photo-1610655507808-a59293f4e332?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3b21hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc3MDY0Mjg1OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman portrait"
+    },
+    {
+      "id": "pilot-2",
+      "description": "Portrait of a male pilot",
+      "imageUrl": "https://images.unsplash.com/photo-1607031542107-f6f46b5d54e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzA2Mjg2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
+    },
+    {
+      "id": "pilot-3",
+      "description": "Portrait of a pilot",
+      "imageUrl": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzA1ODUyMzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "pilot-4",
+      "description": "Portrait of a pilot smiling",
+      "imageUrl": "https://images.unsplash.com/photo-1607529378676-a20456ee2f6b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzbWlsaW5nJTIwcGVyc29ufGVufDB8fHx8MTc3MDY5OTEyNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "smiling person"
+    },
+    {
+      "id": "pilot-5",
+      "description": "Pilot in uniform",
+      "imageUrl": "https://images.unsplash.com/photo-1764712754826-d9b9cfdd651a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwaWxvdCUyMHVuaWZvcm18ZW58MHx8fHwxNzcwNzAzNTI5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pilot uniform"
+    },
+    {
+      "id": "drone-1",
+      "description": "A quadcopter drone in flight over mountains",
+      "imageUrl": "https://images.unsplash.com/photo-1725180959512-a874c9a451ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkcm9uZSUyMG1vdW50YWluc3xlbnwwfHx8fDE3NzA2NjU4OTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "drone mountains"
+    },
+    {
+      "id": "drone-2",
+      "description": "A delivery drone carrying a package",
+      "imageUrl": "https://images.unsplash.com/photo-1508444845599-5c89863b1c44?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxkcm9uZSUyMGRlbGl2ZXJ5fGVufDB8fHx8MTc3MDcwMzUyOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "drone delivery"
+    },
+    {
+      "id": "drone-3",
+      "description": "A surveillance drone with a camera",
+      "imageUrl": "https://images.unsplash.com/photo-1743852376488-1f6190f91741?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzdXJ2ZWlsbGFuY2UlMjBkcm9uZXxlbnwwfHx8fDE3NzA3MDM1Mjl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "surveillance drone"
+    },
+    {
+      "id": "drone-4",
+      "description": "An agricultural drone spraying a field",
+      "imageUrl": "https://images.unsplash.com/photo-1621928372414-30e144d51d49?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxhZ3JpY3VsdHVyYWwlMjBkcm9uZXxlbnwwfHx8fDE3NzA2MzA5NDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "agricultural drone"
+    },
+    {
+      "id": "drone-5",
+      "description": "A heavy-lift drone",
+      "imageUrl": "https://images.unsplash.com/photo-1727600511816-78461105fbdb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxoZWF2eSUyMGRyb25lfGVufDB8fHx8MTc3MDcwMzUyOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "heavy drone"
+    }
+  ]
 }
