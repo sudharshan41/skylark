@@ -109,7 +109,7 @@ export function AssignmentForm() {
       }
     });
 
-    setTimeout(() => setIsCoolingDown(false), 5000); // 5-second cooldown
+    setTimeout(() => setIsCoolingDown(false), 15000); // 15-second cooldown
   }
 
   function onSubmit(data: AssignmentFormValues) {
@@ -226,7 +226,7 @@ export function AssignmentForm() {
                           Checking...
                       </>
                     ) : isCoolingDown ? (
-                      'Ready to check again'
+                      'Cooldown...'
                     ) : (
                       'Check for Conflicts'
                     )}
