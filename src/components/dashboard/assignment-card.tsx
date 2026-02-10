@@ -1,7 +1,8 @@
+'use client';
+
 import Image from 'next/image';
 import {
   Calendar,
-  CheckCircle,
   Clock,
   MapPin,
   Package,
@@ -19,6 +20,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import { useEffect, useState } from 'react';
 
 function getStatusBadgeVariant(status: Assignment['status']) {
   switch (status) {
@@ -41,6 +43,11 @@ function getInitials(name: string) {
 }
 
 export function AssignmentCard({ assignment }: { assignment: Assignment }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const startDate = new Date(assignment.startTime);
   const endDate = new Date(assignment.endTime);
 
@@ -83,13 +90,15 @@ export function AssignmentCard({ assignment }: { assignment: Assignment }) {
       <CardFooter className="flex-col items-start gap-2 p-4 text-sm text-muted-foreground">
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4" />
-          <span>{startDate.toLocaleDateString()}</span>
+          <span>{mounted ? startDate.toLocaleDateString() : null}</span>
         </div>
         <div className="flex items-center gap-2">
           <Clock className="h-4 w-4" />
           <span>
+            {mounted ? (<>
             {startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -{' '}
             {endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </>) : null}
           </span>
         </div>
       </CardFooter>
