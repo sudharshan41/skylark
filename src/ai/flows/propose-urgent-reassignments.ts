@@ -15,6 +15,15 @@ const ProposeUrgentReassignmentsInputSchema = z.object({
   situationDescription: z
     .string()
     .describe('A description of the urgent situation.'),
+  pilotsJson: z
+    .string()
+    .describe('A JSON string representing the list of all pilots.'),
+  dronesJson: z
+    .string()
+    .describe('A JSON string representing the list of all drones.'),
+  assignmentsJson: z
+    .string()
+    .describe('A JSON string representing the list of all assignments.'),
 });
 export type ProposeUrgentReassignmentsInput = z.infer<
   typeof ProposeUrgentReassignmentsInputSchema
@@ -43,11 +52,17 @@ const prompt = ai.definePrompt({
   output: {schema: ProposeUrgentReassignmentsOutputSchema},
   prompt: `You are an expert coordinator specializing in reassigning pilots and drones in urgent situations.
 
-  Given the following urgent situation, propose an optimal reassignment plan, considering real-time availability, skills, and location of pilots and drones.
+  Given the following urgent situation and real-time operational data, propose an optimal reassignment plan. Your plan should consider pilot availability, skills, certifications, and location, as well as drone availability and capabilities.
 
-  Urgent Situation: {{{situationDescription}}}
+  Urgent Situation:
+  {{{situationDescription}}}
 
-  Provide a detailed proposal with clear reasoning for each reassignment, aiming for minimal disruption to ongoing projects.`,
+  Current Operational Data:
+  - Pilots: {{{pilotsJson}}}
+  - Drones: {{{dronesJson}}}
+  - Assignments: {{{assignmentsJson}}}
+
+  Provide a detailed proposal with clear reasoning for each reassignment, aiming for minimal disruption to ongoing projects. The response should be formatted as clear, readable text.`,
 });
 
 const proposeUrgentReassignmentsFlow = ai.defineFlow(

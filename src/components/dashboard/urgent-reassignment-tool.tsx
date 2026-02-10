@@ -16,6 +16,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { assignments, drones, pilots } from '@/lib/data';
 
 export function UrgentReassignmentTool() {
   const [open, setOpen] = useState(false);
@@ -29,7 +30,12 @@ export function UrgentReassignmentTool() {
     setIsLoading(true);
     setProposal('');
     try {
-      const result = await proposeUrgentReassignments({ situationDescription: situation });
+      const result = await proposeUrgentReassignments({
+        situationDescription: situation,
+        pilotsJson: JSON.stringify(pilots),
+        dronesJson: JSON.stringify(drones),
+        assignmentsJson: JSON.stringify(assignments),
+      });
       setProposal(result.reassignmentProposal);
     } catch (error) {
       console.error(error);
@@ -63,7 +69,7 @@ export function UrgentReassignmentTool() {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Textarea
-            placeholder="e.g., 'Pilot Ben Carter reported sick for SXSW shoot. Drone CineMover 8K is on site in Austin. Need a replacement pilot with cinematography skills immediately.'"
+            placeholder="e.g., 'Pilot Neha reported sick for Client B - Inspection. Drone DJI Mavic 3 Thermal is on site in Mumbai. Need a replacement pilot with Inspection skills immediately.'"
             value={situation}
             onChange={(e) => setSituation(e.target.value)}
             rows={4}
@@ -78,7 +84,7 @@ export function UrgentReassignmentTool() {
           <Alert>
             <Bot className="h-4 w-4" />
             <AlertTitle className="font-headline">Reassignment Proposal</AlertTitle>
-            <AlertDescription className="prose prose-sm max-w-none text-foreground">
+            <AlertDescription className="prose prose-sm max-w-none text-foreground whitespace-pre-wrap">
               {proposal}
             </AlertDescription>
           </Alert>
