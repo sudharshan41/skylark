@@ -62,7 +62,7 @@ To push this project to a new GitHub repository:
 3.  **Link the remote repository and push your code:**
     ```bash
     # Replace YOUR_REPOSITORY_URL with your actual repository URL
-    git remote add origin YOUR_REPOSITORY_URL
+    git remote add origin https://github.com/sudharshan41/skylark.git
     git push -u origin main
     ```
 
@@ -73,8 +73,8 @@ To clone the project from GitHub and run it on your local machine:
 **1. Clone the repository:**
 ```bash
 # Replace YOUR_REPOSITORY_URL with your repository URL
-git clone YOUR_REPOSITORY_URL
-cd your-project-folder
+git clone https://github.com/sudharshan41/skylark.git
+cd skylark
 ```
 
 **2. Install Dependencies:**
